@@ -1,5 +1,7 @@
 
 import boto3
+from cwalarms import create_cloudwatch_alarm, delete_cloudwatch_alarms
+from snstopic import create_sns_topics_and_subscriptions
 
 def lambda_handler(event, context):
     # Create an SNS client
@@ -28,7 +30,7 @@ def lambda_handler(event, context):
                 message = f"The instance {instance_id} ({instance_type}) has {action}."
             elif event['detail']['state'] == 'terminated':
                 instance_id = event['detail']['instance-id']
-                delete_cloudwatch_alarms(sns_topic_arn, instance_id)
+                delete_cloudwatch_alarms()
                 # Compose message
                 message = f"The instance {instance_id} ({instance_type}) has {action}."
     sns_client.publish(
