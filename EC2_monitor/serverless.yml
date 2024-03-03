@@ -1,0 +1,30 @@
+service: aws-python-scheduled-cron
+
+frameworkVersion: '3'
+
+
+provider:
+  name: aws
+  runtime: python3.9
+
+functions:
+  rateHandler:
+    handler: handler.run
+    events:
+      # Invoke Lambda function every minute
+      - schedule: rate(1 minute)
+  cronHandler:
+    handler: handler.run
+    #configure eventbridge to get treigered on start and terminate events 
+    eevents:
+      - cloudwatchEvent:
+          name: "sre-ops-cw-ec2-alarm-rule"
+          event:
+            source:
+              - 'aws.ec2'
+            detail-type:
+              - 'EC2 Instance State-change Notification'
+            detail:
+              state:
+                - 'running'
+                - 'terminated'
