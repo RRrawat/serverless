@@ -12,8 +12,7 @@ This repository aims to serve as a central hub for all things related to AWS ser
 
 To get started, simply clone this repository to your local machine:
 
-```bash
-git clone https://github.com/your-username/aws-serverless-resources.git
+git clone https://github.com/RRrawat/serverless.git
 
 Each directory within the repository represents a different aspect of serverless development, containing code samples, configuration files, and documentation to help you understand and implement various serverless solutions.
 
