@@ -16,13 +16,23 @@ def lambda_handler(event, context):
     
     # Determine the action
     action = "started" if state == "running" else "terminated"
-    
-    # Compose message
-    message = f"The instance {instance_id} ({instance_type}) has {action}."
-    
-    # Publish message to SNS topic
+    # Setting up default topic names as per requirements
+    topic_names = [f'demo-EC2-Monitor-SNSTopic']
+        # Retrieve SNS ARNs using the common function
+    sns_topic_arn = create_sns_topics_and_subscriptions(topic_names)
+    if 'detail' in event:
+            if event['detail']['state'] == 'running':
+                instance_id = event['detail']['instance-id']
+                create_cloudwatch_alarm(sns_topic_arn, instance_id)
+                # Compose message
+                message = f"The instance {instance_id} ({instance_type}) has {action}."
+            elif event['detail']['state'] == 'terminated':
+                instance_id = event['detail']['instance-id']
+                delete_cloudwatch_alarms(sns_topic_arn, instance_id)
+                # Compose message
+                message = f"The instance {instance_id} ({instance_type}) has {action}."
     sns_client.publish(
-        TopicArn=topic_arn,
+        TopicArn=sns_topic_arn,
         Message=message,
         Subject=f"Instance {instance_id} {action}"
     )
