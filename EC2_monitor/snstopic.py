@@ -2,16 +2,12 @@ import boto3
 import os
 import logging
 import logging as log
-import yaml
 import json 
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-def get_env_var(env_var):
-    return os.getenv(env_var, None)
-
-email_address = get_env_var('EMAIL_ADDRESSES')
+email_address = os.environ.get('EMAIL_ADDRESSES')
 email_addresses = [email.strip() for email in email_address.split(',')]
 
 def create_sns_topics_and_subscriptions(topic_names):

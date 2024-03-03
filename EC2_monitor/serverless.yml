@@ -1,4 +1,4 @@
-service: aws-python-scheduled-cron
+service: aws-ec2-monitor
 
 frameworkVersion: '3'
 
@@ -10,10 +10,9 @@ provider:
 functions:
   rateHandler:
     handler: handler.run
-    events:
-      # Invoke Lambda function every minute
-      - schedule: rate(1 minute)
-  cronHandler:
+    environment:
+      EMAIL_ADDRESSES: "email1@example.com,email2@example.com"
+  CWevent:
     handler: handler.run
     #configure eventbridge to get treigered on start and terminate events 
     eevents:
